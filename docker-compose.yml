@@ -14,6 +14,8 @@ services:
       # where mongo data is stored
       - mongo_db:/data/db
     #network_mode: host
+    ports: 
+      - 27017:27017
 
   # node api service
   api:
