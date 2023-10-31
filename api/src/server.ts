@@ -1,19 +1,31 @@
 import express from 'express'
 import dotenv from 'dotenv'
+import cors from 'cors'
 
 // import routes
 import usersRouter from './modules/user/users.route'
 import errors from './middles/errors.middle';
 
+const PORT = process.env.PORT || 3000;
+
 // .env
 dotenv.config();
-
-const PORT = process.env.PORT || 3000;
 
 // app
 const app = express();
 // parse json
 app.use(express.json());
+
+// cors
+app.use(cors({
+    // origin: "*"
+    origin: [
+        "http://localhost:4000",
+        "http://localhost:5000",
+    ],
+    // allow cookies
+    credentials: true,
+}));
 
 // middleware: run on each request =: has to come before routes.
 /* app.use((req, res, next) => {
