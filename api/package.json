@@ -1,11 +1,11 @@
 {
   "name": "api",
   "version": "1.0.0",
-  "description": "",
+  "description": "core mern stack app's api",
   "main": "./dist/server.js",
   "scripts": {
     "dev": "tsc -w & nodemon ./dist/server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "tsc -w & nodemon ./dist/server.js"
   },
   "keywords": [],
   "author": "",

@@ -1,0 +1,82 @@
+# docker version
+version: '3.8'
+
+# mongodb and node container
+
+services:
+  # mongo servies
+  mongo_db:
+    container_name: db_containter
+    image: mongo:latest
+    # if container failes =: restart it again
+    restart: always
+    volumes:
+      # where mongo data is stored
+      - mongo_db:/data/db
+    #network_mode: host
+
+  # node api service
+  api:
+    # build the ./api/Dockerfile
+    build: 
+      context: ./api
+      dockerfile: Dockerfile
+    #network_mode: host
+    container_name: api_container
+    restart: always
+    # map =: machine_port to: container_port 
+    ports:
+      - 3000:3000
+    image: api:node-0
+
+    # volumes for local dev: mapping: machine_dir to: container_dir
+    volumes:
+      - ./api:/usr/src/api
+      - /usr/src/app/node_modules
+
+    # environment variables
+    environment:
+      PORT: 3000
+      # use: name of the mongo_service or container_name
+      MONGO_URL: mongodb://db_containter:27017
+      # database name
+      DB_NAME: core
+      # .env name
+      NAME: core
+
+    # api_service : depends on : mongo_db_service
+    depends_on:
+      - mongo_db
+
+  admin:
+    build:
+      context: ./admin
+      dockerfile: Dockerfile
+    volumes:
+      - ./admin:/usr/src/admin
+      - /usr/src/admin/node_modules
+    restart: always
+    ports:
+      - 4000:4000
+    image: admin:next-0
+    container_name: admin_container
+    command: npm run dev
+
+  site:
+    build:
+      context: ./site
+      dockerfile: Dockerfile
+    volumes:
+      - ./site:/usr/src/site
+      - /usr/src/site/node_modules
+    restart: always
+    ports:
+      - 5000:5000
+    image: site:next-0
+    container_name: site_container
+    command: npm run dev
+
+# for persisting mongo_db data
+volumes:
+  mongo_db: {}
+

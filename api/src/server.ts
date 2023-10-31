@@ -1,13 +1,18 @@
 import express from 'express'
+import dotenv from 'dotenv'
 
 // import routes
 import usersRouter from './modules/user/users.route'
 import errors from './middles/errors.middle';
 
-const PORT = 4000;
+// .env
+dotenv.config();
+
+const PORT = process.env.PORT || 3000;
 
 // app
 const app = express();
+// parse json
 app.use(express.json());
 
 // middleware: run on each request =: has to come before routes.
